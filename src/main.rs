@@ -1,3 +1,5 @@
+// Physics sim implemented in Rust
+// Each `step` is a DAY (3600 seconds * 24 hours)
 extern crate find_folder;
 extern crate piston_window;
 
@@ -8,10 +10,9 @@ use piston_window::*;
 const GRAVITY: f64 = 6.67428e-11;
 const DAY: f64 = 24.0*3600.0;
 const AU: f64 = 149.6e9; // Astronomical Unit in meters, roughly distance earth -> sun
-const SCALE: f64 = 100.0 / AU;
-const DIMENSION: u32 = 500;
+const SCALE: f64 = 200.0 / AU;
+const DIMENSION: u32 = 1000;
 const HALF: f64 = 149.6e9 * 2.0 + 149.6e9 / 2.0;
-
 
 type Vel = (f64, f64);
 type Pos = (f64, f64);
@@ -40,26 +41,27 @@ struct Body {
     color: Color, // TODO: color
     name: String,
     scale_pos: Pos,
+    radius: f64,
 }
 
 impl Body {
-    fn new(p: Pos, v: Vel, m: Mass, c: Color, n: String) -> Body {
+    fn new(p: Pos, v: Vel, m: Mass, c: Color, n: String, r: f64) -> Body {
         Body {
             pos: p,
             vel: v,
             mass: m,
             color: c,
             name: n,
+            radius: r,
             scale_pos: (p.0 * SCALE, p.1 * SCALE),
         }
     }
 
     fn draw_planet(&self,c: Context, g: &mut G2d)  {
-        let radius: f64 = 7.0;
-        Rectangle::new(self.color) // red color
+        Ellipse::new(self.color) // red color
             .draw(
                 [self.scale_pos.0, self.scale_pos.1,
-                 radius, radius],
+                 self.radius, self.radius],
                 &c.draw_state, c.transform, g
             );
     }
@@ -113,7 +115,8 @@ fn main() {
     let mut window: PistonWindow = WindowSettings::new(
         "piston: draw_state", Size{width: DIMENSION, height: DIMENSION},
         ).exit_on_esc(true).samples(4).build().unwrap();
-    window.set_lazy(true);
+    // piston window lazy means that only events will tricker a step
+    window.set_lazy(false);
 
     let mut solar_system = big_bang();
 
@@ -159,6 +162,7 @@ fn big_bang() -> Vec<Body> {
         1.98892 * 10.0_f64.powf(30.0),
         [255.0, 255.0, 0.0, 1.0],
         "Sun".to_string(),
+        30.0,
     );
     let earth = Body::new(
         (HALF-AU, HALF),
@@ -166,6 +170,7 @@ fn big_bang() -> Vec<Body> {
         5.972 * 10.0_f64.powf(24.0),
         [0.0, 0.0, 225.0, 1.0],
         "Earth".to_string(),
+        10.0
     );
     let venus = Body::new(
         (HALF+149.6e9, HALF),
@@ -173,6 +178,7 @@ fn big_bang() -> Vec<Body> {
         4.8685 * 10.0_f64.powf(24.0),
         [0.1, 0.0, 0.0, 1.0],
         "Venus".to_string(),
+        9.0,
     );
     solar_system.extend([sun, earth, venus].iter().cloned());
     return solar_system;
