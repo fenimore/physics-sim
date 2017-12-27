@@ -95,7 +95,7 @@ impl Body {
     // apply force to velocity, and velocity to position
     // acceleration = force / mass
     fn accelerate(&self, force: Force) -> Accel {
-        return (force.x / self.mass, force.y / self.mass); // * DAY ?
+        return (force.x / self.mass * DAY, force.y / self.mass * DAY);
     }
 
     fn move_body(&mut self, acc: Accel) {
