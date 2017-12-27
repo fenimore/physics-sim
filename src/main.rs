@@ -1,7 +1,6 @@
 extern crate find_folder;
 extern crate piston_window;
 
-use std::collections::HashMap;
 use std::ops::Add;
 
 use piston_window::*;
@@ -154,21 +153,21 @@ fn main() {
 
 fn big_bang() -> Vec<Body> {
     let mut solar_system = Vec::new();
-    let mut sun = Body::new(
+    let sun = Body::new(
         (HALF, HALF),
         (0.0, 0.0),
         1.98892 * 10.0_f64.powf(30.0),
         [255.0, 255.0, 0.0, 1.0],
         "Sun".to_string(),
     );
-    let mut earth = Body::new(
+    let earth = Body::new(
         (HALF-AU, HALF),
         (0.0, 35.02 * 1000.0),
         5.972 * 10.0_f64.powf(24.0),
         [0.0, 0.0, 225.0, 1.0],
         "Earth".to_string(),
     );
-    let mut venus = Body::new(
+    let venus = Body::new(
         (HALF+149.6e9, HALF),
         (0.0, 29.783 * 1000.0),
         4.8685 * 10.0_f64.powf(24.0),
@@ -179,30 +178,9 @@ fn big_bang() -> Vec<Body> {
     return solar_system;
 }
 
-
-fn local_bodies() -> Vec<Body> {
-    let mut solar_system = Vec::new();
-    let mut moon = Body::new(
-        (AU-384000000.0, AU),
-        (0.0, 3683.0),
-        7.34767309 * 10.0_f64.powf(22.0),
-        [255.0, 255.0, 0.0, 1.0],
-        "Moon".to_string(),
-    );
-    let mut earth = Body::new(
-        (AU, AU),
-        (0.0, 0.0),
-        5.972 * 10.0_f64.powf(24.0),
-        [0.0, 0.0, 225.0, 1.0],
-        "Earth".to_string(),
-    );
-    solar_system.extend([earth, moon].iter().cloned());
-    return solar_system;
-}
-
 #[test]
 fn test_new_body() {
-    let mut earth = Body::new(
+    let earth = Body::new(
         (HALF-AU, HALF),
         (0.0, 35.02 * 1000.0),
         5.972 * 10.0_f64.powf(24.0),
@@ -264,9 +242,9 @@ mod tests {
 
     #[test]
     fn test_accelerate() {
-        let planet = new_planet();
-        let force = Force{x: 5.0, y: 3.0};
-        assert_eq!((0.01, 0.006), planet.accelerate(force));
+        let planet = new_earth();
+        let force = Force{x: 35422429872810204000000.0, y: 0.0};
+        assert_eq!((512.4745380125254, 0.0), planet.accelerate(force));
     }
 }
 
