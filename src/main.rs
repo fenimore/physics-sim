@@ -164,6 +164,14 @@ fn big_bang() -> Vec<Body> {
         "Sun".to_string(),
         30.0,
     );
+    let mars = Body::new(
+        (HALF+AU*1.524, HALF),
+        (0.0, 24.0 * 1000.0),
+        6.38 * 10.0_f64.powf(23.0),
+        [255.0, 0.0, 0.0, 1.0],
+        "Mars".to_string(),
+        11.0,
+    );
     let earth = Body::new(
         (HALF-AU, HALF),
         (0.0, 35.02 * 1000.0),
@@ -173,14 +181,14 @@ fn big_bang() -> Vec<Body> {
         10.0
     );
     let venus = Body::new(
-        (HALF+149.6e9, HALF),
+        (HALF+108.2e9, HALF),
         (0.0, 29.783 * 1000.0),
         4.8685 * 10.0_f64.powf(24.0),
-        [0.1, 0.0, 0.0, 1.0],
+        [0.0, 255.0, 0.0, 1.0],
         "Venus".to_string(),
         9.0,
     );
-    solar_system.extend([sun, earth, venus].iter().cloned());
+    solar_system.extend([sun, earth, venus, mars].iter().cloned());
     return solar_system;
 }
 
