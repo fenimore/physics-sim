@@ -10,9 +10,9 @@ use piston_window::*;
 const GRAVITY: f64 = 6.67428e-11;
 const DAY: f64 = 24.0*3600.0;
 const AU: f64 = 149.6e9; // Astronomical Unit in meters, roughly distance earth -> sun
-const SCALE: f64 = 200.0 / AU;
+const SCALE: f64 = 50.0 / AU;
 const DIMENSION: u32 = 1000;
-const HALF: f64 = 149.6e9 * 2.0 + 149.6e9 / 2.0;
+const HALF: f64 = AU * 10.0;
 
 type Vel = (f64, f64);
 type Pos = (f64, f64);
@@ -122,7 +122,7 @@ fn main() {
 
     while let Some(e) = window.next() {
         window.draw_2d(&e, |c, g| {
-            clear([0.8, 0.8, 0.8, 1.0], g);
+            clear([0.129, 0.1468, 0.168, 1.0], g);
             g.clear_stencil(0);
 
             let mut sums = Vec::new();
@@ -162,33 +162,77 @@ fn big_bang() -> Vec<Body> {
         1.98892 * 10.0_f64.powf(30.0),
         [255.0, 255.0, 0.0, 1.0],
         "Sun".to_string(),
-        30.0,
+        15.0,
     );
     let mars = Body::new(
         (HALF+AU*1.524, HALF),
-        (0.0, 24.0 * 1000.0),
+        (0.0, -24.077 * 1000.0),
         6.38 * 10.0_f64.powf(23.0),
-        [255.0, 0.0, 0.0, 1.0],
+        [0.69803, 0.186215, 0.12549, 1.0],
         "Mars".to_string(),
-        11.0,
+        10.0,
     );
     let earth = Body::new(
         (HALF-AU, HALF),
-        (0.0, 35.02 * 1000.0),
+        (0.0, 29.78 * 1000.0),
         5.972 * 10.0_f64.powf(24.0),
-        [0.0, 0.0, 225.0, 1.0],
+        [0.007843, 0.2202, 0.9960, 1.0],
         "Earth".to_string(),
-        10.0
+        9.0
     );
     let venus = Body::new(
         (HALF+108.2e9, HALF),
-        (0.0, 29.783 * 1000.0),
+        (0.0, -35.02 * 1000.0),
         4.8685 * 10.0_f64.powf(24.0),
-        [0.0, 255.0, 0.0, 1.0],
+        [0.298039, 0.7705882, 0.411765, 1.0],
         "Venus".to_string(),
-        9.0,
+        8.0,
     );
-    solar_system.extend([sun, earth, venus, mars].iter().cloned());
+    let mercury = Body::new(
+        (HALF+AU*0.39 , HALF),
+        (0.0, -48.0 * 1000.0),
+        3.3010 * 10.0_f64.powf(23.0),
+        [0.4312, 0.3725, 0.4, 1.0],
+        "Venus".to_string(),
+        6.0,
+    );
+    let jupiter = Body::new(
+        (HALF, HALF + 5.2*AU),
+        (13.1 * 1000.0, 0.0),
+        1898.0 * 10.0_f64.powf(24.0),
+        [0.69411, 0.6117, 0.85098, 1.0],
+        "Jupiter".to_string(),
+        14.0
+    );
+    let saturn = Body::new(
+        (HALF, HALF + 9.58*AU),
+        (9.7 * 1000.0, 0.0),
+        568.0 * 10.0_f64.powf(24.0),
+        [0.2390, 0.99215, 0.13333, 1.0],
+        "Saturn".to_string(),
+        14.0
+    );
+    let uranus = Body::new(
+        (HALF, HALF + 19.22*AU),
+        (6.8 * 1000.0, 0.0),
+        86.8 * 10.0_f64.powf(24.0),
+        [0.12594, 0.16117, 0.23098, 1.0],
+        "Uranus".to_string(),
+        14.0
+    );
+    let neptune = Body::new(
+        (HALF, HALF + 30.1*AU),
+        (5.4 * 1000.0, 0.0),
+        102.0 * 10.0_f64.powf(24.0),
+        [0.26667, 0.351254, 0.49803, 1.0],
+        "Neptune".to_string(),
+        14.0
+    );
+    solar_system.extend([
+        sun, mercury, venus, earth,
+        mars, jupiter, saturn, uranus,
+        neptune,
+    ].iter().cloned());
     return solar_system;
 }
 
